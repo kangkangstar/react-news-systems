@@ -1,0 +1,42 @@
+{
+  "lists": [
+    {
+      "name": "打代码",
+      "flag": true,
+      "id": 1
+    },
+    {
+      "id": 2,
+      "name": "睡觉",
+      "flag": true
+    },
+    {
+      "id": 3,
+      "name": "打豆豆",
+      "flag": true
+    },
+    {
+      "name": "逛街",
+      "flag": false,
+      "id": 4
+    }
+  ],
+  "contents":[
+    {
+      "id":1,
+      "body":"超级开心",
+      "listId":1
+    },
+    {
+      "id":2,
+      "body":"很开心",
+      "listId":2
+    },
+    {
+      "id":3,
+      "body":"不开心",
+      "listId":3
+    }
+
+  ]
+}
