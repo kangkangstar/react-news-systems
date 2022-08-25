@@ -1,18 +1,22 @@
+// 统一封装的自定义hooks
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { notification } from 'antd'
 
 function usePublish(type) {
-
+    // 解构用户名
     const { username } = JSON.parse(localStorage.getItem('token'))
+    // 存储数据
     const [dataSource, setdataSource] = useState([])
 
+    // 查询当前用户指定发布状态的目录
     useEffect(() => {
         axios(`/news?author=${username}&publishState=${type}&_expand=category`).then(res => {
             setdataSource(res.data)
         })
     }, [username, type])
 
+    // 发布
     const handlePublish = (id) => {
         setdataSource(dataSource.filter(item => item.id !== id))
         axios.patch(`/news/${id}`, {
@@ -28,6 +32,7 @@ function usePublish(type) {
         })
     }
 
+    // 撤销
     const handleSunset = (id) => {
         setdataSource(dataSource.filter(item => item.id !== id))
         axios.patch(`/news/${id}`, {
@@ -42,6 +47,7 @@ function usePublish(type) {
         })
     }
 
+    // 删除
     const handleDelete = (id) => {
         setdataSource(dataSource.filter(item => item.id !== id))
         axios.delete(`/news/${id}`).then(res => {

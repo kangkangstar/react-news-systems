@@ -1,17 +1,19 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom"
 import { Table, Button, Tag, notification } from 'antd'
 
 // 此模块可以看到自己提交到审核中的新闻
 
 export default function AuditList(props) {
     const [dataSource, setDatasource] = useState([])
-    const { username } = JSON.parse(localStorage.getItem('token'))
+    const navigate = useNavigate()
 
-    // 请求需要审核得数据--
+    // 解构用户名，好去获取该用户的数据
+    const { username } = JSON.parse(localStorage.getItem('token'))
+    // 请求作者为登录用户本人 && auditState不等于0 && publishState小于等于1的
     useEffect(() => {
         axios.get(`/news?author=${username}&auditState_ne=0&publishState_lte=1&_expand=category`).then(res => {
-            console.log(username);
             setDatasource(res.data)
         })
     }, [username])
@@ -63,8 +65,6 @@ export default function AuditList(props) {
                         {
                             item.auditState === 3 && <Button type='primary' onClick={() => { handleUpdate(item) }}>更新</Button>
                         }
-
-
                     </div>
                 )
 
@@ -74,7 +74,7 @@ export default function AuditList(props) {
 
     // 撤销按钮的回调
     const handleRervert = (item) => {
-        // 将此项剔除后重新设置值
+        // 使用filter删除此项数据，同时将状态改为0，未审核
         setDatasource(dataSource.filter(data => data.id !== item.id))
         axios.patch(`/news/${item.id}`, {
             auditState: 0
@@ -88,21 +88,21 @@ export default function AuditList(props) {
         })
     }
 
-    // 更新按钮的回调
+    // 更新按钮的回调---带id跳转到新闻更新页面
     const handleUpdate = (item) => {
-        props.history.push(`/news-manage/update/${item.id}`)
+        navigate.push(`/news-manage/update/${item.id}`)
     }
 
     // 发布按钮的回调
     const handlePublish = (item) => {
-        // 发请求更新发布状态
+        // 1.发请求更新发布状态
         axios.patch(`/news/${item.id}`, {
             'publishState': 2,
             'publishTime': Date.now()
         }).then(res => {
-            // 路由跳转
-            props.history.push('/publish-manage/published')
-            // 通知确认框--右下角弹出
+            // 2.路由跳转
+            navigate('/publish-manage/published')
+            // 3.通知确认框--右下角弹出
             notification.info({
                 message: `通知`,
                 description: `您可以到【发布管理/已发布】中查看您的新闻`,

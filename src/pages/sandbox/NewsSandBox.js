@@ -28,7 +28,7 @@ export default function NewsSandBox() {
             <SideMenu></SideMenu>
             <Layout className="site-layout">
                 {/* 头部 */}
-                <TopHeader></TopHeader>
+                <TopHeader style={{ padding: '0 16px' }}></TopHeader>
                 {/* 内容区 */}
                 <Content
                     className="site-layout-background"

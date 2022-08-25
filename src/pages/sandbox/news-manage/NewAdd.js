@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import NewsEditor from '../../../components/news-manage/NewsEditor'
 import { PageHeader, Steps, Button, Form, Input, Select, message, notification } from 'antd';
 import style from './newadd.module.css'
@@ -7,17 +8,33 @@ const { Step } = Steps;
 const { Option } = Select
 
 export default function NewAdd(props) {
+    // 当前第几步
     const [current, setcurrent] = useState(0)
+    // 新闻分类数据
     const [categoryList, setcategoryList] = useState([])
-    const [formInfo, setformInfo] = useState({})
-    const [content, setContent] = useState('')
+    // 点击下一步的时候保存的
+    const [formInfo, setformInfo] = useState({})// 表单数据
+    // 子组件传递过来的
+    const [content, setContent] = useState('')// 文本编辑器数据
+    const navigate = useNavigate()
+
+    // 获取新闻分类列表
+    useEffect(() => {
+        axios.get('/categories').then(res => {
+            setcategoryList(res.data)
+        })
+    }, [])
+
+    //第一步的表单数据收集
+    const NewsForm = useRef(null)
 
     // 如果是第一步，进行数据校验，然后current+1
     const handleNext = () => {
+        //  第一步是表单需要进行验证，其他时候无需验证
         if (current === 0) {
             // 触发表单验证
             NewsForm.current.validateFields().then(res => {
-                // console.log(res);
+                // 通过保存表单信息，进入下一步
                 setformInfo(res)
                 setcurrent(current + 1)
             }).catch(error => {
@@ -30,7 +47,6 @@ export default function NewAdd(props) {
             } else {
                 setcurrent(current + 1)
             }
-
         }
 
     }
@@ -39,19 +55,13 @@ export default function NewAdd(props) {
         setcurrent(current - 1)
     }
 
-    // 获取新闻分类列表
-    useEffect(() => {
-        axios.get('/categories').then(res => {
-            setcategoryList(res.data)
-        })
-    }, [])
-
-    // 给表单绑定ref对象
-    const NewsForm = useRef(null)
+    // 解构用户信息
     const User = JSON.parse(localStorage.getItem('token'))
 
-    // 保存草稿或提交审核的回调
+    // 保存草稿或提交审核的回调-----通过auditState区分跳草稿还是审核，保存完路由跳转加提醒
     const handlesave = (auditState) => {
+        // 1.将新增的新闻post到数据库，格式看后台现有的格式
+        // 用auditState=0代表未审核，跳转草稿箱，auditState=1代表正在审核，跳转审核列表
         axios.post('/news', {
             ...formInfo,
             'content': content,
@@ -59,16 +69,15 @@ export default function NewAdd(props) {
             "author": User.username,
             "roleId": User.roleId,
             "auditState": auditState,
-            "publishState": 0,
-            "createTime": Date.now(),
-            "star": 0,
-            "view": 0,
+            "publishState": 0, // 未发布
+            "createTime": Date.now(),// 创建时间
+            "star": 0, //点赞开始都是0
+            "view": 0, // 浏览默认为0
             // "publishTime": 0
         }).then(res => {
-            // 如果状态为0跳草稿箱，状态为1跳审核列表
-            props.history.push(auditState === 0 ? '/news-manage/draft' : '/audit-manage/list')
-
-            // 通知确认框--右下角弹出
+            // 2.路由跳转：如果状态为0跳草稿箱，状态为1跳审核列表
+            navigate(auditState === 0 ? '/news-manage/draft' : '/audit-manage/list')
+            // 3.通知确认框--右下角弹出
             notification.info({
                 message: `通知`,
                 description: `您可以到${auditState === 0 ? '草稿箱' : '审核列表'}中查看您的新闻`,
@@ -95,7 +104,7 @@ export default function NewAdd(props) {
             <div style={{ margin: '30px' }} >
                 {/* 通过类名的display控制元素的显示和隐藏，保证输入框的数据不丢失,不用总发请求再去设置 */}
                 {/* 1.选择框 */}
-                <div className={current === 0 ? '' : style.active}>
+                <div className={current === 0 ? '' : style.hidde}>
                     <Form
                         name="basic"
                         labelCol={{ span: 2 }} // 占8份
@@ -125,18 +134,16 @@ export default function NewAdd(props) {
                             </Select>
                         </Form.Item>
                     </Form>
-
                 </div>
                 {/* 2.编辑器 */}
-                <div className={current === 1 ? '' : style.active}>
-                    {/* 编辑器 */}
+                <div className={current === 1 ? '' : style.hidde}>
+                    {/* 编辑器，单独封装组件，方便更新时复用 */}
                     <NewsEditor getContent={(value) => {
-                        // console.log(value);
                         setContent(value)
                     }}></NewsEditor>
                 </div>
-                {/*  */}
-                <div className={current === 2 ? '' : style.active}>
+                {/* 3.啥都不显示 */}
+                <div className={current === 2 ? '' : style.hidde}>
                 </div>
             </div>
             {/* 按钮区域---通过current控制按钮的显示逻辑 */}
@@ -145,15 +152,14 @@ export default function NewAdd(props) {
                     current > 0 && <Button onClick={handlePrevious} style={{ marginLeft: '5px' }}>上一步</Button>
                 }
                 {
-                    current < 2 && <Button type='primary' onClick={handleNext} style={{ marginLeft: '5px' }}>下一步</Button>
-                }
-                {
                     current === 2 && <span>
                         <Button type='primary' onClick={() => handlesave(0)} style={{ marginLeft: '5px' }}>保存草稿</Button>
                         <Button danger onClick={() => handlesave(1)} style={{ marginLeft: '5px' }}>提交审核</Button>
                     </span>
                 }
-
+                {
+                    current < 2 && <Button type='primary' onClick={handleNext} style={{ marginLeft: '5px' }}>下一步</Button>
+                }
             </div>
         </div >
     )

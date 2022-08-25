@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react'
+import { useParams } from "react-router-dom"
 import { Descriptions, PageHeader, } from 'antd';
 import moment from 'moment'
 import axios from 'axios';
 
 export default function NewPreview(props) {
+    // 新闻数据
     const [newsInfo, setnewsInfo] = useState(null)
+    // 获取当前新闻的详细数据
+    const params = useParams()
 
     // 请求新闻的详细数据，通过id查找
     useEffect(() => {
-        // console.log(props.match.params);
-        axios.get(`/news/${props.match.params.id}?_expand=category&_expand=role`).then(res => {
+        axios.get(`/news/${params.id}?_expand=category&_expand=role`).then(res => {
             setnewsInfo(res.data)
         })
-    }, [props.match.params.id])
+    }, [params.id])
 
     // 设置状态数据,根据响应得状态值从数组中取数
     const audiList = ['待审核', '审核中', '已通过', '未通过']
@@ -20,6 +23,7 @@ export default function NewPreview(props) {
     const colorList = ['black', 'orange', 'green', 'red']
 
     return (
+        // 新闻数据有的时候再渲染页面
         <div>
             <>
                 {
@@ -27,18 +31,18 @@ export default function NewPreview(props) {
                         onBack={() => window.history.back()}
                         title={newsInfo.title}
                         subTitle={newsInfo.category.title}
-
                     >
                         <Descriptions size="small" column={3}>
                             <Descriptions.Item label="创建者">{newsInfo.author}</Descriptions.Item>
+                            {/* 创建时间在新增新闻保存草稿或提交审核时就添加了，使用的 Date.now() */}
                             <Descriptions.Item label="创建时间">{moment(newsInfo.createTime).format('YYYY-MM-DD HH:mm:ss')}</Descriptions.Item>
-                            <Descriptions.Item label="发布时间">{newsInfo.publishTime ? moment(newsInfo.createTime).format('YYYY-MM-DD HH:mm:ss') : '-'}</Descriptions.Item>
+                            {/* 发布时间有就格式后显示，没有用 - 代替 */}
+                            <Descriptions.Item label="发布时间">{newsInfo.publishTime ? moment(newsInfo.publishTime).format('YYYY-MM-DD HH:mm:ss') : '-'}</Descriptions.Item>
                             <Descriptions.Item label="区域">{newsInfo.region}</Descriptions.Item>
                             <Descriptions.Item label="审核状态" >
                                 <span style={{ color: colorList[newsInfo.auditState] }}>
                                     {audiList[newsInfo.auditState]}
                                 </span>
-
                             </Descriptions.Item>
                             <Descriptions.Item label="发布状态">
                                 <span style={{ color: colorList[newsInfo.publishState] }}>
@@ -55,7 +59,6 @@ export default function NewPreview(props) {
                         <div dangerouslySetInnerHTML={{
                             __html: newsInfo.content
                         }} style={{ border: '1px solid', marginTop: '10px' }}>
-
                         </div>
                     </PageHeader>
                 }

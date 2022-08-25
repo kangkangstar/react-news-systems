@@ -5,74 +5,80 @@ import {
     MenuFoldOutlined,
     UserOutlined
 } from '@ant-design/icons';
-import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { useNavigate } from "react-router-dom"
 const { Header } = Layout;
 
 
 function TopHeader(props) {
-    // const [collapsed, setCollapsed] = useState(true)
+    // 重定向
+    const navigate = useNavigate()
 
-    // 改变左侧收起图标的样式--collapsed回调
-    function changeCollapsed() {
-        // 改变state中的isClollapse的状态
-        props.changeCollapsed()
+    // 改变头部-左侧图标的折叠还是打开
+    const changeCollapsed = () => {
+        // 改变state中的isCollapsed
+        props.changeCollapsed() //reducer中就可以接收action进行处理
     }
 
     // 解构token中的字段
     const { role: { roleName }, username } = JSON.parse(localStorage.getItem('token'))
 
+    // Dropdown的数据
     const menu = (
         <Menu>
-            <Menu.Item>
+            <Menu.Item key={1}>
                 {roleName}
             </Menu.Item>
-            <Menu.Item danger onClick={() => {
+            <Menu.Item danger key={2} onClick={() => {
+                // 移出token
                 localStorage.removeItem('token')
-                props.history.replace('/login')
+                // 重定向至登录页面
+                navigate('/login')
             }}>
                 退出
             </Menu.Item>
         </Menu>
     );
 
+
+
     return (
-        <Header
-            className="site-layout-background"
-            style={{ padding: '0px 16px' }}
-        >
+        < Header className="site-layout-background"
+            style={{ padding: '0px 16px' }} >
+            {/*动态渲染展示哪个图标*/}
             {
-                props.isClollapse ? <MenuUnfoldOutlined onClick={changeCollapsed} /> : <MenuFoldOutlined onClick={changeCollapsed} />
+                props.isClollapsed ? <MenuUnfoldOutlined onClick={changeCollapsed} /> : <MenuFoldOutlined onClick={changeCollapsed} />
             }
+            {/*右侧欢迎语和头像下拉框*/}
             <div style={{ float: 'right' }}>
-                <span>欢迎<span style={{ color: '#1890ff' }}>{username}</span>回来</span>
+                <span>欢迎{username}回来</span>
                 <Dropdown overlay={menu}>
                     <Avatar size="large" icon={<UserOutlined />} />
                 </Dropdown>
             </div>
+        </ Header>
 
-        </Header>
     )
 }
 
-/*  
-connect(
-    mapStateToProps,
-    mapDispatchToProps
-    )(UI组件-被包装的组件)
-*/
-
-const mapStateToProps = ({ Collapse: { isClollapse } }) => {
+// 映射state成props
+const mapStateToProps = (state) => {
+    const { Collapsed: { isClollapsed } } = state
     return {
-        isClollapse
+        isClollapsed
     }
 }
 
+// 映射dispatch成props
 const mapDispatchToProps = {
+    // 传递一个函数，返回值就是一个action
     changeCollapsed() {
         return {
-            type: 'change_collapsed'  // action
+            type: 'change_collapsed'
         }
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(TopHeader))
+
+// 使用connect包装，第一次可以接收2个参数，state和dispatch可以映射成props
+export default connect(mapStateToProps, mapDispatchToProps)(TopHeader)
+

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { store } from '../redux/store'
+// 配置请求基础路径，ajax请求会自动加上此前缀
 axios.defaults.baseURL = "http://localhost:5000"
 
 // axios.defaults.headers
@@ -7,8 +8,9 @@ axios.defaults.baseURL = "http://localhost:5000"
 // axios.interceptors.request.use
 // axios.interceptors.response.use
 
+// 请求拦截器：显示loading效果
 axios.interceptors.request.use(function(config) {
-    // Do something before request is sent
+    // 请求发送之前做一些事情
     // 显示loading
     store.dispatch({
         type: "change_loading",
@@ -20,26 +22,17 @@ axios.interceptors.request.use(function(config) {
     return Promise.reject(error);
 });
 
-// Add a response interceptor
+// 响应拦截器：成功或失败都隐藏loading
 axios.interceptors.response.use(function(response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
-
     store.dispatch({
         type: "change_loading",
         payload: false
     })
-
-    //隐藏loading
     return response;
 }, function(error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
     store.dispatch({
         type: "change_loading",
         payload: false
     })
-
-    //隐藏loading
     return Promise.reject(error);
 });

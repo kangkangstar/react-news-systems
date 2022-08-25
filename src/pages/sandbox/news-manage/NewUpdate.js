@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import NewsEditor from '../../../components/news-manage/NewsEditor'
+import { useParams, useNavigate } from "react-router-dom"
 import { PageHeader, Steps, Button, Form, Input, Select, message, notification } from 'antd';
 import style from './newadd.module.css'
 import axios from 'axios'
@@ -11,6 +12,11 @@ export default function NewUpdate(props) {
     const [categoryList, setcategoryList] = useState([])
     const [formInfo, setformInfo] = useState({})
     const [content, setContent] = useState('')
+
+    // 获取params参数
+    const params = useParams()
+    // 重定向
+    const navigate = useNavigate()
 
     // 如果是第一步，进行数据校验，然后current+1
     const handleNext = () => {
@@ -38,23 +44,26 @@ export default function NewUpdate(props) {
         setcurrent(current - 1)
     }
 
+    // 获取分类数据
     useEffect(() => {
         axios.get('/categories').then(res => {
             setcategoryList(res.data)
         })
     }, [])
 
-    // 请求新闻的详细数据，通过id查找
+    // 获取当前新闻已有的详情数据，通过id查找
     useEffect(() => {
-        // console.log(props.match.params);
-        axios.get(`/news/${props.match.params.id}?_expand=category&_expand=role`).then(res => {
+        axios.get(`/news/${params.id}?_expand=category&_expand=role`).then(res => {
+            // 解构出需要的数据
             let { title, categoryId, content } = res.data
+            // 设置当前新闻的表单信息--setFieldsValue
             NewsForm.current.setFieldsValue({
                 title, categoryId
             })
+            // 收集到内容重新设置回去
             setContent(content)
         })
-    }, [props.match.params.id])
+    }, [params.id])
 
     // 给表单绑定ref对象
     const NewsForm = useRef(null)
@@ -62,14 +71,13 @@ export default function NewUpdate(props) {
 
     // 保存草稿或提交审核的回调--补丁更新
     const handlesave = (auditState) => {
-        axios.patch(`/news/${props.match.params.id}`, {
+        axios.patch(`/news/${params.id}`, {
             ...formInfo,
             'content': content,
             "auditState": auditState,
         }).then(res => {
             // 如果状态为0跳草稿箱，状态为1跳审核列表
-            props.history.push(auditState === 0 ? '/news-manage/draft' : '/audit-manage/list')
-
+            navigate(auditState === 0 ? '/news-manage/draft' : '/audit-manage/list')
             // 通知确认框--右下角弹出
             notification.info({
                 message: `通知`,
@@ -87,7 +95,8 @@ export default function NewUpdate(props) {
                 title="更新新闻"
                 onBack={() => {
                     // console.log(props.history);
-                    props.history.goBack()
+                    // props.history.goBack()
+                    navigate('/audit-manage/list')
                 }}
                 subTitle="This is a subtitle"
             />
@@ -136,7 +145,6 @@ export default function NewUpdate(props) {
                 <div className={current === 1 ? '' : style.active}>
                     {/* 编辑器 */}
                     <NewsEditor getContent={(value) => {
-                        // console.log(value);
                         setContent(value)
                     }} content={content}></NewsEditor>
                 </div>
@@ -147,15 +155,15 @@ export default function NewUpdate(props) {
             {/* 按钮区域---通过current控制按钮的显示逻辑 */}
             <div style={{ marginTop: '50px' }}>
                 {
-                    current > 0 && <Button onClick={handlePrevious}>上一步</Button>
+                    current > 0 && <Button onClick={handlePrevious}  >上一步</Button>
                 }
                 {
-                    current < 2 && <Button type='primary' onClick={handleNext} >下一步</Button>
+                    current < 2 && <Button type='primary' onClick={handleNext} style={{ marginLeft: '5px' }}>下一步</Button>
                 }
                 {
                     current === 2 && <span>
-                        <Button type='primary' onClick={() => handlesave(0)}>保存草稿</Button>
-                        <Button danger onClick={() => handlesave(1)}>提交审核</Button>
+                        <Button type='primary' onClick={() => handlesave(0)} style={{ marginLeft: '5px' }}>保存草稿</Button>
+                        <Button danger onClick={() => handlesave(1)} style={{ marginLeft: '5px' }}>提交审核</Button>
                     </span>
                 }
 

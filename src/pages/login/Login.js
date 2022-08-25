@@ -6,6 +6,7 @@ import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import particlesOptions from "./particles.json";
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
 
 
 export default function Login(props) {
@@ -15,30 +16,34 @@ export default function Login(props) {
         loadFull(main);
     }, [])
 
+    const navigate = useNavigate()
+
 
     // 收集表单数据
     const onFinish = (values) => {
-        // console.log(values)
-
-        axios.get(`/users?username=${values.username}&password=${values.password}&roleState=true&_expand=role`).then(res => {
-            console.log(res.data)
+        // 1.从收集的表单数据中解构密码和用户名
+        const { username, password } = values
+        // 2.发get请求校验用户名，密码及用户状态，同时获取用户的权限
+        axios.get(`/users?username=${username}&password=${password}&roleState=true&_expand=role`).then(res => {
+            // 3.获取回来的数据为空，则提示错误
             if (res.data.length === 0) {
                 message.error("用户名或密码不匹配")
             } else {
-                localStorage.setItem("token", JSON.stringify(res.data[0]))
-                props.history.push("/")
+                // 4.不为空，则保存token，需要转化为json字符串，同时重定向到首页
+                // res.data是当前用户打开状态下的角色数据
+                localStorage.setItem('token', JSON.stringify(res.data[0]))
+                navigate('/home')
             }
         })
     }
 
     return (
         <div style={{ backgroundColor: 'rgb(35,39,65)', height: '100%', overflow: 'hidden' }}>
-            {/* 粒子效果 */}
-            <Particles options={particlesOptions} init={particlesInit} height={document.documentElement.clientHeight}
-
-            />
+            {/* 粒子效果,需要占满屏幕 */}
+            <Particles options={particlesOptions} init={particlesInit} height={document.documentElement.clientHeight} />
             <div className='formContainer'>
                 <div className='logintitle'>全球新闻发布管理系统</div>
+                {/* 登录表单 */}
                 <Form
                     name="normal_login"
                     className="login-form"

@@ -1,8 +1,9 @@
+// 发布管理模块统一封装的组件
 import React from 'react'
 import { Table } from 'antd'
 
 export default function NewsPublish(props) {
-
+    // 表格标题
     const columns = [
         {
             title: '新闻标题',

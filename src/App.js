@@ -6,8 +6,9 @@ import './App.css'
 import { PersistGate } from 'redux-persist/integration/react'
 
 function App() {
-  // Provider包裹，然后通过传递store
+  // 借助Provider包裹，然后传递store
   return <Provider store={store}>
+    {/*PersistGate包裹，解决刷新页面后侧边栏出现折叠到不折叠过渡的问题 */}
     <PersistGate loading={null} persistor={persistor}>
       <IndexRouter> </IndexRouter>
     </PersistGate>

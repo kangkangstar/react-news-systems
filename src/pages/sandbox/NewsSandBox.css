@@ -22,5 +22,6 @@
 
 #root,
 .ant-layout {
+    /* 让组件占满全屏 */
     height: 100%;
 }

@@ -4,7 +4,7 @@ import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/ico
 import axios from 'axios';
 import * as Echarts from 'echarts'
 import _ from 'lodash'
-import { withRouter } from 'react-router-dom'
+import withRouter from "../../../utils/withRouter"
 const { Meta } = Card;
 
 function Home(props) {

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Button, Modal, Tree } from 'antd'
-import { DeleteOutlined, UnorderedListOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { DeleteOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import axios from 'axios'
-const { confirm } = Modal
+import confirmMethod from "../../../utils/cofirmDeleteMethod"
 
 export default function RoleList() {
     // 表格数据
@@ -52,10 +52,11 @@ export default function RoleList() {
                 return (
                     <div>
                         {/* 删除按钮 */}
-                        <Button danger shape="circle" icon={<DeleteOutlined />} onClick={() => confirmMethod(item)} />
+                        <Button danger shape="circle" icon={<DeleteOutlined />} onClick={() => confirmMethod(item, deleteMethod)} />
                         {/* 权限分配按钮 */}
-                        {/*  setCurrentRights(item.rights) //初始化当前角色的rights */}
+                        {/*  setCurrentRights(item.rights) //初始化当前选中的角色的rights */}
                         <Button type="primary" shape="circle" icon={<UnorderedListOutlined />}
+                            style={{ marginLeft: '5px' }}
                             onClick={() => {
                                 setIsModalVisible(true)
                                 setCurrentRights(item.rights)
@@ -70,21 +71,21 @@ export default function RoleList() {
     ]
 
     // 删除-确定方法
-    const confirmMethod = (item) => {
-        confirm({
-            title: '确定要删除吗?',
-            icon: <ExclamationCircleOutlined />,
-            okText: '确认',
-            cancelText: '取消',
-            // content: 'Some descriptions',
-            onOk() {
-                deleteMethod(item)
-            },
-            onCancel() {
-                // console.log('Cancel');
-            },
-        });
-    }
+    // const confirmMethod = (item) => {
+    //     confirm({
+    //         title: '确定要删除吗?',
+    //         icon: <ExclamationCircleOutlined />,
+    //         okText: '确认',
+    //         cancelText: '取消',
+    //         // content: 'Some descriptions',
+    //         onOk() {
+    //             deleteMethod(item)
+    //         },
+    //         onCancel() {
+    //             // console.log('Cancel');
+    //         },
+    //     });
+    // }
 
     // 删除方法
     const deleteMethod = (item) => {
@@ -112,7 +113,7 @@ export default function RoleList() {
             }
             return item
         }))
-        // 通知数据库更新角色权限
+        // 通知数据库更新当前角色的角色权限
         axios.patch(`/roles/${currentID}`, {
             rights: currentRights
         })

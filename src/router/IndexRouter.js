@@ -1,28 +1,24 @@
 // 项目路由结构的文件
 import React from 'react'
 import {
-    HashRouter, Redirect, Route, Switch
+    HashRouter, Route, Routes
 } from 'react-router-dom'
 import Login from '../pages/login/Login'
 import NewsSandBox from '../pages/sandbox/NewsSandBox'
-import News from '../pages/news/News'
-import Detail from '../pages/news/Detail'
+// import News from '../pages/news/News'
+// import Detail from '../pages/news/Detail'
+import AuthComponent from "../utils/AuthComponent"
+// import UserList from "../pages/sandbox/user-manage/UserList"
 
 export default function IndexRouter() {
-    // Switch实现路由精准匹配，提高匹配效率
     return (
         <HashRouter>
-            <Switch >
-                <Route path='/login' component={Login} />
-                <Route path='/news' component={News} />
-                <Route path='/detail/:id' component={Detail} />
-                {/* <Route path='/' component={NewsSandBox} /> */}
-                {/* 通过三元实现token为真显示，无则重定向到login */}
-                <Route path='/' render={() =>
-                    localStorage.getItem('token') ?
-                        <NewsSandBox></NewsSandBox> :
-                        <Redirect to='/login' />} />
-            </Switch >
-        </HashRouter>
+            <Routes>
+                <Route path='/login' element={<Login />}></Route>
+                {/* <Route path='/user-manage/list' element={<UserList />}></Route> */}
+                {/* 路由拦截与重定向 */}
+                <Route path='/*' element={<AuthComponent> <NewsSandBox></NewsSandBox> </AuthComponent>}></Route>
+            </Routes >
+        </HashRouter >
     )
 }

@@ -3,7 +3,7 @@ import NewsPublish from '../../../components/publish-manage/NewsPublish'
 import usePublish from '../../../components/publish-manage/usePublish'
 import { Button } from 'antd'
 
-export default function Unpublished() {
+export default function Published() {
     // 2 === 已发布的
     const { dataSource, handleSunset } = usePublish(2)
 

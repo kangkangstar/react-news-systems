@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Tag, Button, Modal, Popover, Switch } from 'antd'
-import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Table, Tag, Button, Popover, Switch } from 'antd'
+import { DeleteOutlined, EditOutlined, } from '@ant-design/icons';
 import axios from 'axios'
-const { confirm } = Modal
+import confirmMethod from "../../../utils/cofirmDeleteMethod"
 
 export default function RightList() {
 
@@ -53,7 +53,7 @@ export default function RightList() {
                     <div>
                         {/* 删除按钮 */}
                         <Button danger shape="circle" icon={<DeleteOutlined />}
-                            onClick={() => confirmMethod(item)} />
+                            onClick={() => confirmMethod(item, deleteMethod)} />
                         {/* 
                             编辑按钮+气泡卡片
                             Popover：点击/鼠标移入元素，弹出气泡式的卡片浮层。 
@@ -71,9 +71,11 @@ export default function RightList() {
                             </div>}
                             trigger={item.pagepermisson === undefined ? '' : "click"}
                         >
+                            {/* item的pagepermisson为空的按钮显示为禁用 */}
                             <Button type="primary" shape="circle"
                                 icon={<EditOutlined />}
-                                disabled={item.pagepermisson === undefined} />
+                                disabled={item.pagepermisson === undefined}
+                                style={{ marginLeft: '5px' }} />
                         </Popover>
                     </div>
                 )
@@ -89,34 +91,35 @@ export default function RightList() {
         // 更新页面
         setDataSource([...dataSource])
         // 通知数据库补丁更新
+        // 如果是一级就直接列表更新
         if (item.grade === 1) {
             axios.patch(`/rights/${item.id}`, {
                 pagepermisson: item.pagepermisson
             })
-
         } else {
+            // 如果是二级，需要更新children表
             axios.patch(`/children/${item.id}`, {
                 pagepermisson: item.pagepermisson
             })
         }
     }
 
-    // 删除-确定方法
-    const confirmMethod = (item) => {
-        // 调用Modal对话框的Modal.confirm方法
-        confirm({
-            title: '确定要删除吗?',
-            icon: <ExclamationCircleOutlined />,//自定义图标
-            okText: '确认',//确认按钮文字
-            cancelText: '取消',//设置 Modal.confirm 取消按钮文字
-            content: '温馨提示：删除操作不可撤销',
-            onOk() {
-                deleteMethod(item)
-            },//点击确定回调，参数为关闭函数，返回 promise 时 resolve 后自动关闭
-            onCancel() {
-            },//取消回调，参数为关闭函数，返回 promise 时 resolve 后自动关闭
-        });
-    }
+    // // 删除-确定方法
+    // const confirmMethod = (item) => {
+    //     // 调用Modal对话框的Modal.confirm方法
+    //     confirm({
+    //         title: '确定要删除吗?',
+    //         icon: <ExclamationCircleOutlined />,//自定义图标
+    //         okText: '确认',//确认按钮文字
+    //         cancelText: '取消',//设置 Modal.confirm 取消按钮文字
+    //         content: '温馨提示：删除操作不可撤销',
+    //         onOk() {
+    //             deleteMethod(item)
+    //         },//点击确定回调，参数为关闭函数，返回 promise 时 resolve 后自动关闭
+    //         onCancel() {
+    //         },//取消回调，参数为关闭函数，返回 promise 时 resolve 后自动关闭
+    //     });
+    // }
 
     // 删除-确定-删除方法
     const deleteMethod = (item) => {
