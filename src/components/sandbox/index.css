@@ -1,0 +1,13 @@
+.logo {
+    background-color: #333;
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    margin: 10px;
+    line-height: 32px;
+    /* height跟随line-height以及文字行数自动变化 */
+}
+
+.redcolor {
+    color: red !important;
+}

@@ -1,0 +1,136 @@
+{
+  "fpsLimit": 60,
+  "fullScreen": {
+    "enable": true,
+    "zIndex": 1
+  },
+  "particles": {
+    "number": {
+      "value": 50
+    },
+    "shape": {
+      "type": "circle"
+    },
+    "opacity": {
+      "value": 0.5
+    },
+    "size": {
+      "value": 400,
+      "random": {
+        "enable": true,
+        "minimumValue": 100
+      }
+    },
+    "move": {
+      "enable": true,
+      "speed": 10,
+      "size": true,
+      "direction": "top",
+      "outModes": {
+        "default": "out",
+        "top": "destroy",
+        "bottom": "none"
+      }
+    }
+  },
+  "interactivity": {
+    "detectsOn": "canvas",
+    "events": {
+      "resize": true,
+      
+    "onHover": {
+        "enable": true,
+        "mode": "bubble"
+
+    }
+    },
+    "modes": {
+      "bubble": {
+          "distance": 400,
+          "duration": 2,
+          "opacity": 1,
+          "size": 40,
+          "speed": 3
+      },
+      "grab": {
+          "distance": 400,
+          "lineLinked": {
+              "opacity": 1
+          }
+      },
+      "push": {
+          "quantity": 4
+      },
+      "remove": {
+          "quantity": 2
+      },
+      "repulse": {
+          "distance": 500,
+          "duration": 0.4
+      }
+  }
+  },
+  "detectRetina": true,
+  "themes": [
+    {
+      "name": "light",
+      "default": {
+        "value": true,
+        "mode": "light"
+      },
+      "options": {
+        "background": {
+          "color": "#f7f8ef"
+        },
+        "particles": {
+          "color": {
+            "value": [
+              "#5bc0eb",
+              "#fde74c",
+              "#9bc53d",
+              "#e55934",
+              "#fa7921"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "dark",
+      "default": {
+        "value": true,
+        "mode": "dark"
+      },
+      "options": {
+        "background": {
+          "color": "#080710"
+        },
+        "particles": {
+          "color": {
+            "value": [
+              "#004f74",
+              "#5f5800",
+              "#245100",
+              "#7d0000",
+              "#810c00"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "emitters": {
+    "position": {
+      "x": 50,
+      "y": 150
+    },
+    "rate": {
+      "delay": 0.2,
+      "quantity": 3
+    },
+    "size": {
+      "width": 200,
+      "height": 0
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+    "common":{
+        "ok":"确定",
+        "cancel":"取消",
+        "manage":"操作",
+        "deleteconfirm":"确定要删除吗?"
+    },
+    "topheader": {
+        "welcome": "欢迎",
+        "back":"回来",
+        "logout":"退出"
+    },
+    "sidemenu": {
+        "title": "文章发布管理系统",
+        "/home":"首页",
+        "/user-manage":"用户管理",
+        "/user-manage/add":"添加用户",
+        "/user-manage/delete":"删除用户",
+        "/user-manage/update":"更新用户",
+        "/user-manage/list":"用户列表",
+        "/right-manage":"权限管理",
+        "/right-manage/role/list":"角色列表",
+        "/right-manage/right/list":"权限列表",
+        "/news-manage":"文章管理",
+        "/news-manage/add":"撰写文章",
+        "/news-manage/draft":"草稿箱",
+        "/news-manage/category":"文章分类",
+        "/audit-manage":"审核管理",
+        "/audit-manage/audit":"审核文章",
+        "/audit-manage/list":"审核列表",
+        "/publish-manage":"发布管理",
+        "/publish-manage/unpublished":"待发布",
+        "/publish-manage/published":"已发布",
+        "/publish-manage/sunset":"已下线"
+    },
+    "home":{
+        "newstitle":"文章分类图示",
+        "carttitle1":"用户最长浏览",
+        "carttitle2":"用户点赞最多",
+        "pertitle":"个人文章分类",
+        "global":"全球",
+        "superadmin":"超级管理员",
+        "regionadmin":"区域管理员",
+        "regionedit":"区域编辑"
+        
+    },
+    "user":{
+        "adduser":"添加用户",
+        "updateuser":"更新用户",
+        "region":"区域",
+        "rolename":"角色名称",
+        "username":"用户名",
+        "rolestate":"用户状态",
+        "password":"密码",
+        "namem":"请输入用户名",
+        "passwordm":"请输入密码",
+        "regionm":"请输入区域",
+        "rolem":"请输入角色"
+    },
+    "role":{
+        "permission":"权限分配"
+    },
+    "right":{
+        "name":"权限名称",
+        "path":"权限路径",
+        "popover":"页面配置项",
+        "message":"温馨提示：删除操作不可撤销"
+    },
+    "login":{
+        "title":"文章发布管理系统",
+        "login":"登录"
+    }
+}

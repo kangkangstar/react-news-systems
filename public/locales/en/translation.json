@@ -1,0 +1,72 @@
+{
+    "common":{
+        "ok":"Confirm",
+        "cancel":"Cancel",
+        "manage":"Manage",
+        "deleteconfirm":"Are you sure to delete?"
+    },
+    "topheader": {
+        "welcome": "welcome",
+        "back":"back",
+        "logout":"logout"
+    },
+    "sidemenu": {
+        "title": "Article Release Management System",
+        "/home":"Home",
+        "/user-manage":"UserManage",
+        "/user-manage/add":"AddUser",
+        "/user-manage/delete":"DeleteUser",
+        "/user-manage/update":"UpdateUser",
+        "/user-manage/list":"UserList",
+        "/right-manage":"RightManage",
+        "/right-manage/role/list":"RoleList",
+        "/right-manage/right/list":"RightList",
+        "/news-manage":"NewsManage",
+        "/news-manage/add":"AddNews",
+        "/news-manage/draft":"NewsDraft",
+        "/news-manage/category":"NewsCategory",
+        "/audit-manage":"AuditManage",
+        "/audit-manage/audit":"ReviewNews",
+        "/audit-manage/list":"AuditList",
+        "/publish-manage":"PublishManage",
+        "/publish-manage/unpublished":"Unpublished",
+        "/publish-manage/published":"Published",
+        "/publish-manage/sunset":"Sunset"
+    },
+    "home":{
+        "newstitle":"News classification diagram",
+        "carttitle1":"User's longest browsing",
+        "carttitle2":"Users like most",
+        "pertitle":"Personal news classification",
+        "global":"Global",
+        "superadmin":"super admin",
+        "regionadmin":"region admin",
+        "regionedit":"region edit"
+    },
+    "user":{
+        "adduser":"Add User",
+        "updateuser":"Update User",
+        "region":"Region",
+        "rolename":"Rolename",
+        "username":"Username",
+        "rolestate":"Rolestate",
+        "password":"Password",
+        "namem":"User name is required",
+        "passwordm":"Password is required ",
+        "regionm":"Region is required",
+        "rolem":"Rolename is required"
+    },
+    "role":{
+        "permission":"Permission Assignment"
+    },
+    "right":{
+        "name":"Permission Name",
+        "path":"Permission Path",
+        "popover":"Configuration Item",
+        "message":"Tips: The deletion is irrevocable"
+    },
+    "login":{
+        "title":"Article Management System",
+        "login":"Login"
+    }    
+}
