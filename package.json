@@ -12,6 +12,7 @@
     "echarts": "^5.3.2",
     "html-to-draftjs": "^1.5.0",
     "http-proxy-middleware": "^2.0.6",
+    "i18n-js": "^4.1.1",
     "moment": "^2.29.3",
     "nprogress": "^0.2.0",
     "react": "^18.1.0",
@@ -23,6 +24,7 @@
     "redux": "^4.2.0",
     "redux-persist": "^6.0.0",
     "tsparticles": "^2.0.6",
+    "umi": "^4.0.21",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
