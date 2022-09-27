@@ -12,15 +12,13 @@ import NewsSandBox from '../pages/sandbox/NewsSandBox'
 
 
 export default function IndexRouter() {
-    // const Login = lazy(() => import('../pages/login/Login'));
     const News = lazy(() => import('../pages/news/News'));
     const Detail = lazy(() => import('../pages/news/Detail'));
-    // const NewsSandBox = lazy(() => import('../pages/sandbox/NewsSandBox'));
 
 
     // Switch实现路由精准匹配，提高匹配效率
     return (
-        <Suspense fallback={<div>加载中</div>}>
+        <Suspense fallback={<div>loading</div>}>
             <HashRouter>
                 <Switch >
                     <Route path='/login' component={Login} />

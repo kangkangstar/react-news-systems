@@ -2,23 +2,11 @@ import React, { useEffect, useState, lazy, Suspense } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import axios from 'axios'
 import Home from '../../pages/sandbox/home/Home'
-// import UserList from '../../pages/sandbox/user-manage/UserList'
-// import RoleList from '../../pages/sandbox/right-manage/RoleList'
-// import RightList from '../../pages/sandbox/right-manage/RightList'
 import NoPermission from '../../pages/sandbox/nopermission/NoPermission'
-// import NewAdd from '../../pages/sandbox/news-manage/NewAdd'
-// import NewDraft from '../../pages/sandbox/news-manage/NewDraft'
-// import NewCategory from '../../pages/sandbox/news-manage/NewCategory'
-// import Audit from '../../pages/sandbox/audit-manage/Audit'
-// import AuditList from '../../pages/sandbox/audit-manage/AuditList'
-// import Unpublished from '../../pages/sandbox/publish-manage/Unpublished'
-// import Published from '../../pages/sandbox/publish-manage/Published'
-// import Sunset from '../../pages/sandbox/publish-manage/Sunset'
-// import NewPreview from '../../pages/sandbox/news-manage/NewPreview'
-// import NewUpdate from '../../pages/sandbox/news-manage/NewUpdate'
 import { Spin } from 'antd'
 import { connect } from 'react-redux'
 
+// 路由懒加载
 const LocalRouterMap = {
     '/home': Home,
     '/user-manage/list': lazy(() => import('../../pages/sandbox/user-manage/UserList')),
@@ -36,24 +24,6 @@ const LocalRouterMap = {
     "/publish-manage/sunset": lazy(() => import('../../pages/sandbox/publish-manage/Sunset')),
 }
 
-// 需要展示的路由数据
-// const LocalRouterMap = {
-//     '/home': Home,
-//     '/user-manage/list': UserList,
-//     '/right-manage/role/list': RoleList,
-//     '/right-manage/right/list': RightList,
-//     '/news-manage/add': NewAdd,
-//     '/news-manage/draft': NewDraft,
-//     "/news-manage/category": NewCategory,
-//     "/news-manage/preview/:id": NewPreview,
-//     "/news-manage/update/:id": NewUpdate,
-//     "/audit-manage/audit": Audit,
-//     "/audit-manage/list": AuditList,
-//     "/publish-manage/unpublished": Unpublished,
-//     "/publish-manage/published": Published,
-//     "/publish-manage/sunset": Sunset
-// }
-
 function NewsRouter(props) {
     // 存储一级和二级分类数据的数据
     const [BackRouteList, setBackRouteList] = useState([])
@@ -66,7 +36,6 @@ function NewsRouter(props) {
             axios.get('/children')
         ]).then(res => {
             setBackRouteList([...res[0].data, ...res[1].data])
-            console.log(res[0].data, res[1].data, 1111111111111);
         })
     }, [])
 

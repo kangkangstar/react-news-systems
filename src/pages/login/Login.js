@@ -10,19 +10,7 @@ import { useTranslation } from "react-i18next";
 import { connect } from 'react-redux'
 
 function Login(props) {
-
-    // 数据请求——最长浏览和点赞最多
-    // useEffect(() => {
-    //     // 浏览最多
-    //     axios.get(`/news?publishState=2&_expand=category&_sort=view&_order=desc&_limit=6`).then(res => {
-    //         sessionStorage.setItem("newssort", JSON.stringify(res.data));
-    //     })
-    //     // 点赞最多
-    //     axios.get(`/news?publishState=2&_expand=category&_sort=start&_order=desc&_limit=6`).then(res => {
-    //         sessionStorage.setItem("newsstart", JSON.stringify(res.data));
-    //     })
-    // }, [])
-
+    // 解构国际化需要的函数
     const { t, i18n } = useTranslation();
 
     // 粒子效果初始值的回调
@@ -31,7 +19,7 @@ function Login(props) {
     }, [])
 
 
-    // 收集表单数据
+    // 收集表单数据---点击登录的时候请求home页的数据
     const onFinish = (values) => {
         axios.get(`/users?username=${values.username}&password=${values.password}&roleState=true&_expand=role`).then(res => {
             if (res.data.length === 0) {
@@ -58,7 +46,7 @@ function Login(props) {
         // props.langname = 'en'
         // 修改 langname
         props.change_en()
-        // 使用新的langname就行修改
+        // 使用新的langname进行修改
         i18n.changeLanguage(props.langname);
     }
 
@@ -84,6 +72,7 @@ function Login(props) {
                         name="username"
                         rules={[{ required: true, message: t("user.namem") }]}
                     >
+                        {/* 解决chrome覆盖浏览器Input输入框自带背景颜色，第一种方式关闭自动填充  <input type="text" autocomplete="off"> */}
                         <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder={t("user.username")} />
                     </Form.Item>
                     <Form.Item

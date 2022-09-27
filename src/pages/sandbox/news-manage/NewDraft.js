@@ -9,6 +9,7 @@ export default function NewDraft(props) {
     const { username } = JSON.parse(sessionStorage.getItem('token'))
 
     // 获取作者本人未发布的新闻
+    // &_expand=category
     useEffect(() => {
         axios.get(`/news?author=${username}&auditState=0&_expand=category`).then(res => {
             const list = res.data

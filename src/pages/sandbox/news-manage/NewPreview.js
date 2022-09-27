@@ -5,6 +5,7 @@ import axios from 'axios';
 
 export default function NewPreview(props) {
     const [newsInfo, setnewsInfo] = useState(null)
+    // console.log(props.match.params.id, 1111);
 
     // 请求新闻的详细数据，通过id查找
     useEffect(() => {

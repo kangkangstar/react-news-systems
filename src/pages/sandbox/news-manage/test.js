@@ -4,7 +4,6 @@ import axios from 'axios'
 import { notification } from 'antd';
 
 export default function NewAdd(props) {
-    // 获取用户信息
     const User = JSON.parse(sessionStorage.getItem('token'))
     const [formInfo, setformInfo] = useState({})
     // 存储从子组件获取到的文章信息

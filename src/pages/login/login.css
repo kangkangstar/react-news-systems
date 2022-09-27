@@ -19,3 +19,19 @@
     height: 80px;
     line-height: 80px;
 }
+
+.ant-input {
+    /* 背景色透明(重点) */
+    background: transparent;
+    color: white;
+}
+
+/* 重点 */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-transition-delay: 111111s;
+    -webkit-transition: color 11111s ease-out,
+        background-color 111111s ease-out;
+}

@@ -1,6 +1,6 @@
-import React, { useState, lazy, Suspense } from 'react'
+import React, { useState } from 'react'
 // 引入一般组件
-// import SideMenu from '../../components/sandbox/SideMenu'
+import SideMenu from '../../components/sandbox/SideMenu'
 import TopHeader from '../../components/sandbox/TopHeader'
 // 引入单独封装的路由组件
 import NewsRouter from '../../components/sandbox/NewsRouter'
@@ -15,7 +15,9 @@ import moment from 'moment'
 const { Content } = Layout
 
 export default function NewsSandBox() {
-    const SideMenu = lazy(() => import('../../components/sandbox/SideMenu'));
+    // 侧边栏如果再用路由懒加载，会出现抖动问题
+    // const SideMenu = lazy(() => import('../../components/sandbox/SideMenu'));
+
     // const TopHeader = lazy(() => import('../../components/sandbox/TopHeader'));
     // 默认是英文
     const [locale, setLocal] = useState(enUS);
@@ -39,9 +41,7 @@ export default function NewsSandBox() {
         <ConfigProvider locale={locale}>
             <Layout >
                 {/* 一般组件:侧边栏 */}
-                <Suspense fallback={<div>Loading...</div>}>
-                    <SideMenu></SideMenu>
-                </Suspense>
+                <SideMenu></SideMenu>
                 <Layout className="site-layout">
                     {/* 一般组件：头部 */}
                     <TopHeader changeLocale={changeLocale} locale={locale}></TopHeader>

@@ -1,24 +1,35 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react'
 import { convertToRaw, EditorState, ContentState } from 'draft-js';
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+// import "./newseditor.css"
 
-export default function NewsEditor(props) {
-    const [editorState, seteditorState] = useState('')
+const NewsEditor = forwardRef((props, ref) => {
+    const [editorState, seteditorState] = useState("")
+    //将子组件的方法 暴露给父组件
+    useImperativeHandle(ref, () => ({
+        clearMessage
+    }))
 
-    // 将文本转化为draft对象存储
+    // 将输入的文本清空
+    const clearMessage = () => {
+        seteditorState('')
+    }
+    // 将文本转化为draft对象存储,content就是需要展示的html文本
     useEffect(() => {
         const html = props.content
         if (html === undefined) return
-        // 将htlm转为 draft对象
+        // 将htlm转为 draft对象,输入不能为空才能转换
         const contentBlock = htmlToDraft(html);
         // 如果有数据
         if (contentBlock) {
             // 
             const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+            // 转为了draft格式
             const editorState = EditorState.createWithContent(contentState);
+            // 存储转化好的数据
             seteditorState(editorState)
         }
     }, [props.content])
@@ -49,16 +60,17 @@ export default function NewsEditor(props) {
     //     })
     // }
 
+    const test = (editorState) => {
+        seteditorState(editorState)
+    }
+
 
     return (
         <div>
             {/* 失去焦点将文本转换为html片段 
             localization={{
                     locale: 'zh',
-                }}  ——中文区域设置
-            
-            
-            
+                }}  ——中文区域设置           
             */}
             <Editor
                 editorState={editorState}
@@ -68,9 +80,9 @@ export default function NewsEditor(props) {
                 localization={{
                     locale: 'zh',
                 }}
-                onEditorStateChange={(editorState) => { seteditorState(editorState) }}
+                onEditorStateChange={test.bind(this)}
                 onBlur={() => {
-                    // 失焦的时候将输入的文本转为html格式然后传递给父组件
+                    // 失焦的时候将输入的文本转为html格式然后传递给父组件,好展示出来
                     props.getContent(draftToHtml(convertToRaw(editorState.getCurrentContent())))
                 }}
                 mention={{
@@ -92,8 +104,9 @@ export default function NewsEditor(props) {
             />
         </div>
     )
-}
+})
 
+export default NewsEditor
 
 // function getBase64(img, callback) {
 //     return new Promise((res, rej) => {
